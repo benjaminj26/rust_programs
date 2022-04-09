@@ -1,6 +1,6 @@
-mod prime_range;
+mod bubble_sort;
 
 fn main()
 {
-    prime_range::prime_range();
+    bubble_sort::bubble_sort();
 }
