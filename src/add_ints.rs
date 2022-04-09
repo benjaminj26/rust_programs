@@ -1,6 +1,6 @@
 use std::io;
 
-fn main() 
+pub fn add_ints() 
 {
     println!("Enter the first number: ");
     let x = read_int32();
