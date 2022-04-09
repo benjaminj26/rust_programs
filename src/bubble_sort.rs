@@ -1,4 +1,5 @@
-use std::io;
+use crate::read_values::to_int32;
+use crate::read_values::to_usize;
 
 pub fn bubble_sort()
 {
@@ -51,21 +52,4 @@ fn read_vector() -> Vec<i32>
         x += 1;
     }
     vector
-}
-
-pub fn to_int32() -> i32
-{
-    let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:i32 = str.trim().parse().expect("Unable to parse");
-    num
-}
-
-
-pub fn to_usize() -> usize
-{
-    let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:usize = str.trim().parse().expect("Unable to parse");
-    num
 }
