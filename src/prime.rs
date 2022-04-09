@@ -7,15 +7,13 @@ pub fn prime()
     let mut str = String::new();
     io::stdin().read_line(&mut str).expect("Unable to read from stdin");
     let number:i32 = str.trim().parse().expect("Unable to parse");
-    let mut x:i32 = 2;
-    while x <= number/2
+    for x in 2..(f32::sqrt(number as f32) as i32 + 1)
     {
         if number % x == 0
         {
             flag = 1;
             break;
         }
-        x += 1;
     }
     if flag == 0
     {
