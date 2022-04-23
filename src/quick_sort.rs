@@ -26,7 +26,14 @@ fn quick_sort(vector:&mut Vec<i32>, low:usize, upp:usize)
     if low < upp
     {
         let location = partition(vector, low, upp);
-        quick_sort(vector, low, location-1);
+        if location <= 0
+        {
+            quick_sort(vector, low, location);    
+        }
+        else
+        {
+            quick_sort(vector, low, location-1);
+        }
         quick_sort(vector, location+1, upp);
     }
 }
@@ -43,9 +50,26 @@ fn partition(vector:&mut Vec<i32>, low:usize, upp:usize) -> usize
             start += 1;
         }
 
-        while end > low && vector[end] > pivot
+        while end >= low && vector[end] > pivot
         {
-            end -= 1;
+            if end == 0
+            {
+                break;
+            }
+            else
+            {
+                end -= 1;
+            }
+        }
+
+        if start > upp
+        {
+            start = upp;
+        }
+
+        if end < low
+        {
+            end = low;
         }
 
         if start < end
@@ -56,9 +80,18 @@ fn partition(vector:&mut Vec<i32>, low:usize, upp:usize) -> usize
         }
     }
     
-    let temp = vector[low];
-    vector[low] = vector[end];
-    vector[end] = temp;
+    if start == end && vector[end] <= pivot
+    {
+        let temp = vector[low];
+        vector[low] = vector[end];
+        vector[end] = temp;
+    }
+    else if start > end
+    {
+        let temp = vector[low];
+        vector[low] = vector[end];
+        vector[end] = temp;
+    }
     
 
     return end;
