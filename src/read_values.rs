@@ -96,3 +96,10 @@ pub fn to_usize() -> usize
     let num:usize = str.trim().parse().expect("Unable to parse");
     num
 }
+
+pub fn read_string() -> String
+{
+    let mut str = String::new();
+    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
+    str
+}
