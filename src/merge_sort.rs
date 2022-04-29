@@ -1,3 +1,9 @@
+/*
+    This a program to sort a vector using Merge Sort algorithm, written in Rust
+    Author : Benjamin Joseph
+    Date : 29-04-2022
+*/
+
 use crate::read_values::to_usize;
 use crate::read_values::to_int32;
 
