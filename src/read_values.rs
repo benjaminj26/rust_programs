@@ -103,3 +103,10 @@ pub fn read_string() -> String
     io::stdin().read_line(&mut str).expect("Unable to read from stdin");
     str
 }
+
+pub fn read_char() -> char
+{
+    let mut str = String::new();
+    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
+    str.remove(0)
+}
