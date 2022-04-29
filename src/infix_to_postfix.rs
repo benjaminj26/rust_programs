@@ -1,3 +1,11 @@
+/*
+    This is a program to convert an infix expression to postfix
+    expression using stack, written in Rust
+
+    Author : Benjamin Joseph
+    Date : 29-04-2022
+*/
+
 use std::io;
 
 pub fn infix_to_postfix()
