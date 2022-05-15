@@ -50,7 +50,7 @@ fn heapify(vector:&mut Vec<i32>, index:usize, size:usize)
         largest = left;
     }
     
-    if right < size &&  vector[right] > vector[largest]
+    if right < size && vector[right] > vector[largest]
     {
         largest = right;
     }
