@@ -41,7 +41,7 @@ pub fn to_uint64() -> u64
     num
 }
 
-pub fn to_float64() ->f64
+pub fn to_float64() -> f64
 {
     let mut str = String::new();
     io::stdin().read_line(&mut str).expect("Unable to read from stdin");
@@ -49,7 +49,7 @@ pub fn to_float64() ->f64
     num
 }
 
-pub fn to_int16() ->i16
+pub fn to_int16() -> i16
 {
     let mut str = String::new();
     io::stdin().read_line(&mut str).expect("Unable to read from stdin");
@@ -57,7 +57,7 @@ pub fn to_int16() ->i16
     num
 }
 
-pub fn to_uint16() ->u16
+pub fn to_uint16() -> u16
 {
     let mut str = String::new();
     io::stdin().read_line(&mut str).expect("Unable to read from stdin");
