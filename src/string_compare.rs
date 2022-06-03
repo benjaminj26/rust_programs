@@ -10,7 +10,7 @@ pub fn string_compare()
     println!("Enter the second string:");
     io::stdin().read_line(&mut str2).expect("Unable to read line");
     
-    if str1.eq(&str2) == true
+    if str1.eq_ignore_ascii_case(&str2) == true
     {
         println!("The two strings are equal");
     }

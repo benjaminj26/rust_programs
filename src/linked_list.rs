@@ -1,30 +1,38 @@
-// use std::rc::Rc;
+use std::rc::Rc;
 use crate::read_values::to_int32;
 
 struct Node
 {
     data:i32,
-    next:Option<Box<Node>>
+    next:Option<Rc<Node>>
 }
 
 impl Node
 {
-    fn create_node(data:i32) -> Box<Node>
+    fn create_node(data:i32) -> Rc<Node>
     {
-        let new_node = Box::new(Node{data,next:None});
+        let new_node = Rc::new(Node{data,next:None});
         new_node
     }
     
-    fn append(node:Option<Box<Node>>, head:&mut Option<Box<Node>>, tail:&mut Option<Box<Node>>)
+    fn append(node:Rc<Node>, head:&mut Option<Rc<Node>>, tail:&mut Option<Rc<Node>>)
     {
-
+        if head.is_none() && tail.is_none()
+        {
+            *head = Some(Rc::clone(&node));
+            *tail = Some(node);
+        }
+        else
+        {
+            tail::Node.next = None;
+        }
     }
 }
 
 pub fn linked_list_main()
 {
-    let mut head:Option<Box<Node>> = None;
-    let mut tail:Option<Box<Node>> = None;
+    let mut head:Option<Rc<Node>> = None;
+    let mut tail:Option<Rc<Node>> = None;
     loop
     {
         println!(
@@ -43,16 +51,8 @@ pub fn linked_list_main()
             1 => {
                 println!("Enter the data:");
                 let data = to_int32();
-                let new_node = create_node(data);
-                if head.is_none() && tail.is_none()
-                {
-                    head = Some(Box::clone(&new_node));
-                    tail = Some(new_node);
-                }
-                else
-                {
-                    let temp = tail.unwrap();
-                }
+                let new_node = Node::create_node(data);
+                
             }
             _ => {
                 println!("Invalid Input!!");
