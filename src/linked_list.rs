@@ -1,60 +1,141 @@
 use std::rc::Rc;
+use std::cell::RefCell;
 use crate::read_values::to_int32;
+use std::iter::Iterator;
 
 struct Node
 {
-    data:i32,
-    next:Option<Rc<Node>>
+    value:i32,
+    next:Rc<RefCell<Option<Node>>>
 }
 
 impl Node
 {
-    fn create_node(data:i32) -> Rc<Node>
+    fn new(value:i32) -> Rc<RefCell<Option<Node>>>
     {
-        let new_node = Rc::new(Node{data,next:None});
-        new_node
+        let new_value = Rc::new(RefCell::new(Some(Node{value, next:Rc::new(RefCell::new(None))})));
+        new_value
     }
-    
-    fn append(node:Rc<Node>, head:&mut Option<Rc<Node>>, tail:&mut Option<Rc<Node>>)
+}
+
+// impl Copy for Node{}
+
+impl Clone for Node
+{
+    fn clone(&self) -> Node
     {
-        if head.is_none() && tail.is_none()
+        let node = Node{value:self.value, next:Rc::clone(&self.next)};
+        node
+    }
+}
+
+
+struct Linked_List
+{
+    head:Rc<RefCell<Option<Node>>>,
+    tail:Rc<RefCell<Option<Node>>>
+}
+
+impl Linked_List
+{
+    fn push_back(&mut self,value:i32)
+    {
+        println!("Enter the data:");
+        let data = to_int32();
+        let new_node = Node::new(data);
+        let something = self.tail.take();
+        match something
         {
-            *head = Some(Rc::clone(&node));
-            *tail = Some(node);
+            None =>
+            {
+                self.head = new_node;
+                self.tail = Rc::clone(&self.head);
+            },
+
+            Some(mut x) =>
+            {
+                x.next = new_node;
+                self.tail = Rc::clone(&x.next);
+            }
         }
-        else
+    }
+
+    fn pop_front(&mut self)
+    {
+        let something = self.head.take();
+        match something
         {
-            tail::Node.next = None;
+            None =>
+            {
+                self.head.replace(None);
+            },
+            Some(x) => 
+            {
+                self.head = x.next;
+            }
         }
+    }
+}
+
+// impl Copy for Linked_List{}
+
+impl Clone for Linked_List
+{
+    fn clone(&self) -> Linked_List
+    {
+        head
+    }
+}
+
+impl Iterator for Linked_List
+{
+    type Item = Rc<RefCell<Option<Node>>>;
+    fn next(&mut self) -> Option<Self::Item>
+    {
+        Some(self.head)
     }
 }
 
 pub fn linked_list_main()
 {
-    let mut head:Option<Rc<Node>> = None;
-    let mut tail:Option<Rc<Node>> = None;
+    let mut head:Rc<RefCell<Option<Node>>> = Rc::new(RefCell::new(None));
+    let mut tail:Rc<RefCell<Option<Node>>> = Rc::new(RefCell::new(None));
     loop
     {
         println!(
             "
                 1.Insert new node
-                2.Delete a node from the end
-                3.Delete a node from the beginning
-                4.Display all the nodes
-                5.Exit
+                2.Delete a node from the beginning
+                3.Display all the nodes
+                4.Exit
                 Enter your choice:
             "
         );
         let choice = to_int32();
         match choice
         {
-            1 => {
-                println!("Enter the data:");
-                let data = to_int32();
-                let new_node = Node::create_node(data);
+            1 =>
+            {
                 
             }
-            _ => {
+
+            2 =>
+            {
+                
+            }
+
+            3 =>
+            {
+                
+            }
+
+            4 =>
+            {
+                break;
+            }
+
+            _ =>
+            {
                 println!("Invalid Input!!");
             }   
         }
