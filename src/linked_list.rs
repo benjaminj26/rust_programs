@@ -30,13 +30,13 @@ impl Clone for Node
 }
 
 
-struct Linked_List
+struct LinkedList
 {
     head:Rc<RefCell<Option<Node>>>,
     tail:Rc<RefCell<Option<Node>>>
 }
 
-impl Linked_List
+impl LinkedList
 {
     fn push_back(&mut self,value:i32)
     {
@@ -79,7 +79,7 @@ impl Linked_List
 
 // impl Copy for Linked_List{}
 
-impl Clone for Linked_List
+impl Clone for LinkedList
 {
     fn clone(&self) -> Linked_List
     {
