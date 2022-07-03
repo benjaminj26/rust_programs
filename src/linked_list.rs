@@ -6,100 +6,132 @@ use std::iter::Iterator;
 struct Node
 {
     value:i32,
-    next:Rc<RefCell<Option<Node>>>
+    next:Option<Rc<RefCell<Node>>>,
+    prev:Option<Rc<RefCell<Node>>>
 }
 
 impl Node
 {
-    fn new(value:i32) -> Rc<RefCell<Option<Node>>>
+    fn new(value:i32) -> Rc<RefCell<Node>>
     {
-        let new_value = Rc::new(RefCell::new(Some(Node{value, next:Rc::new(RefCell::new(None))})));
+        let node = Node{value, next:None, prev:None};
+        let new_value = Rc::new(RefCell::new(node));
         new_value
     }
 }
 
-// impl Copy for Node{}
-
-impl Clone for Node
-{
-    fn clone(&self) -> Node
-    {
-        let node = Node{value:self.value, next:Rc::clone(&self.next)};
-        node
-    }
-}
-
-
 struct LinkedList
 {
-    head:Rc<RefCell<Option<Node>>>,
-    tail:Rc<RefCell<Option<Node>>>
+    head:Option<Rc<RefCell<Node>>>,
+    tail:Option<Rc<RefCell<Node>>>,
+    current_value:Option<Rc<RefCell<Node>>>
 }
 
 impl LinkedList
 {
-    fn push_back(&mut self,value:i32)
+    fn push_back(&mut self)
     {
         println!("Enter the data:");
         let data = to_int32();
         let new_node = Node::new(data);
-        let something = self.tail.take();
-        match something
+        let temp_tail = Some(new_node.clone());
+        match self.tail
         {
-            None =>
+            Some(ref mut x) =>
             {
-                self.head = new_node;
-                self.tail = Rc::clone(&self.head);
+                new_node.borrow_mut().prev = Some(x.clone());
+                x.borrow_mut().next = Some(new_node);
             },
 
-            Some(mut x) =>
+            None =>
             {
-                x.next = new_node;
-                self.tail = Rc::clone(&x.next);
+                self.current_value = Some(new_node.clone());
+                self.head = Some(new_node);
             }
         }
+        self.tail = temp_tail;
     }
 
-    fn pop_front(&mut self)
+    fn pop_back(&mut self)
     {
-        let something = self.head.take();
-        match something
+        let mut temp_tail:Option<Rc<RefCell<Node>>> = None;
+        match self.tail
         {
             None =>
             {
-                self.head.replace(None);
+                if let None = self.head
+                {
+                    println!("The list is empty");
+                }
+                else
+                {
+                    self.head = None;
+                    self.current_value = None;
+                }
             },
-            Some(x) => 
+            Some(ref mut x) => 
             {
-                self.head = x.next;
+                println!("{} is deleted from the list", x.borrow().value);
+                temp_tail = x.borrow().prev.clone();
+                self.tail.take();
             }
         }
+
+        match temp_tail
+        {
+            Some(ref mut x) =>
+            {
+                x.borrow_mut().next = None;
+            },
+
+            None =>
+            {
+                println!("Something is wrong");
+            }
+        }
+        self.tail = temp_tail;
     }
 }
 
 // impl Copy for Linked_List{}
 
-impl Clone for LinkedList
-{
-    fn clone(&self) -> Linked_List
-    {
-        head
-    }
-}
+// impl Clone for LinkedList
+// {
+//     fn clone(&self) -> LinkedList
+//     {
+//         head
+//     }
+// }
 
-impl Iterator for Linked_List
+impl Iterator for LinkedList
 {
-    type Item = Rc<RefCell<Option<Node>>>;
+    type Item = Node;
     fn next(&mut self) -> Option<Self::Item>
     {
-        Some(self.head)
+        let temp1 = self.current_value.clone();
+        let mut temp2:Option<Rc<RefCell<Node>>> = None;
+        match self.current_value
+        {
+            Some(ref mut x) =>
+            {
+                temp2 = x.borrow().next.clone();
+            },
+            None =>
+            {
+                temp2 = None;
+            }
+        }
+        self.current_value = temp2;
+        match temp1
+        {
+            Some()
+        }
     }
 }
 
 pub fn linked_list_main()
 {
-    let mut head:Rc<RefCell<Option<Node>>> = Rc::new(RefCell::new(None));
-    let mut tail:Rc<RefCell<Option<Node>>> = Rc::new(RefCell::new(None));
+    let mut linked_list = LinkedList{head:None, tail:None, current_value:None};
     loop
     {
         println!(
@@ -116,12 +148,12 @@ pub fn linked_list_main()
         {
             1 =>
             {
-                
+                linked_list.push_back();
             }
 
             2 =>
             {
-                
+                linked_list.pop_back();
             }
 
             3 =>
