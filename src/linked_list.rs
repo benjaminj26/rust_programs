@@ -1,8 +1,9 @@
 use std::rc::Rc;
 use std::cell::RefCell;
 use crate::read_values::to_int32;
-use std::iter::Iterator;
+// use std::iter::Iterator;
 
+#[derive(Clone)]
 struct Node
 {
     value:i32,
@@ -20,6 +21,7 @@ impl Node
     }
 }
 
+#[derive(Clone)]
 struct LinkedList
 {
     head:Option<Rc<RefCell<Node>>>,
@@ -86,10 +88,42 @@ impl LinkedList
 
             None =>
             {
-                println!("Something is wrong");
+                // println!("Something is wrong");
             }
         }
         self.tail = temp_tail;
+    }
+
+    fn display(&mut self)
+    {
+        let mut temp_value:Option<Rc<RefCell<Node>>>;
+        loop
+        {
+            match self.current_value
+            {
+                None =>
+                {
+                    if let None = self.head
+                    {
+                        println!("The list is empty");
+                        break;
+                    }
+                    else
+                    {
+                        println!();
+                        break;
+                    }
+                },
+
+                Some(ref x) =>
+                {
+                    print!("{} ", x.borrow().value);
+                    temp_value = x.borrow().next.clone();
+                }
+            }
+            self.current_value = temp_value;
+        }
+        self.current_value = self.head.clone();
     }
 }
 
@@ -103,31 +137,39 @@ impl LinkedList
 //     }
 // }
 
-impl Iterator for LinkedList
-{
-    type Item = Node;
-    fn next(&mut self) -> Option<Self::Item>
-    {
-        let temp1 = self.current_value.clone();
-        let mut temp2:Option<Rc<RefCell<Node>>> = None;
-        match self.current_value
-        {
-            Some(ref mut x) =>
-            {
-                temp2 = x.borrow().next.clone();
-            },
-            None =>
-            {
-                temp2 = None;
-            }
-        }
-        self.current_value = temp2;
-        match temp1
-        {
-            Some()
-        }
-    }
-}
+// impl Iterator for LinkedList
+// {
+//     type Item = Node;
+//     fn next(&mut self) -> Option<Self::Item>
+//     {
+//         let temp1 = self.current_value.clone();
+//         let temp2:Option<Rc<RefCell<Node>>>;
+//         match self.current_value
+//         {
+//             Some(ref mut x) =>
+//             {
+//                 temp2 = x.borrow().next.clone();
+//             },
+//             None =>
+//             {
+//                 temp2 = None;
+//             }
+//         }
+//         self.current_value = temp2;
+//         match temp1
+//         {
+//             Some(ref x) =>
+//             {
+//                 return Some(x.borrow().clone());
+//             },
+
+//             None =>
+//             {
+//                 return None;
+//             }
+//         }
+//     }
+// }
 
 pub fn linked_list_main()
 {
@@ -136,11 +178,11 @@ pub fn linked_list_main()
     {
         println!(
             "
-                1.Insert new node
-                2.Delete a node from the beginning
-                3.Display all the nodes
-                4.Exit
-                Enter your choice:
+            1.Insert new node
+            2.Delete a node from the beginning
+            3.Display all the nodes
+            4.Exit
+            Enter your choice:
             "
         );
         let choice = to_int32();
@@ -158,7 +200,7 @@ pub fn linked_list_main()
 
             3 =>
             {
-                
+                linked_list.display();
             }
 
             4 =>
