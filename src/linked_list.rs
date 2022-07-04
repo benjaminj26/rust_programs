@@ -177,13 +177,7 @@ pub fn linked_list_main()
     loop
     {
         println!(
-            "
-            1.Insert new node
-            2.Delete a node from the beginning
-            3.Display all the nodes
-            4.Exit
-            Enter your choice:
-            "
+            "1.Insert new node\n2.Delete a node from the beginning\n3.Display all the nodes\n4.Exit\nEnter your choice:"
         );
         let choice = to_int32();
         match choice
