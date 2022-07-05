@@ -1,7 +1,6 @@
 use std::rc::Rc;
 use std::cell::RefCell;
 use crate::read_values::to_int32;
-// use std::iter::Iterator;
 
 #[derive(Clone)]
 struct Node
@@ -127,50 +126,6 @@ impl LinkedList
     }
 }
 
-// impl Copy for Linked_List{}
-
-// impl Clone for LinkedList
-// {
-//     fn clone(&self) -> LinkedList
-//     {
-//         head
-//     }
-// }
-
-// impl Iterator for LinkedList
-// {
-//     type Item = Node;
-//     fn next(&mut self) -> Option<Self::Item>
-//     {
-//         let temp1 = self.current_value.clone();
-//         let temp2:Option<Rc<RefCell<Node>>>;
-//         match self.current_value
-//         {
-//             Some(ref mut x) =>
-//             {
-//                 temp2 = x.borrow().next.clone();
-//             },
-//             None =>
-//             {
-//                 temp2 = None;
-//             }
-//         }
-//         self.current_value = temp2;
-//         match temp1
-//         {
-//             Some(ref x) =>
-//             {
-//                 return Some(x.borrow().clone());
-//             },
-
-//             None =>
-//             {
-//                 return None;
-//             }
-//         }
-//     }
-// }
-
 pub fn linked_list_main()
 {
     let mut linked_list = LinkedList{head:None, tail:None, current_value:None};
@@ -208,6 +163,4 @@ pub fn linked_list_main()
             }   
         }
     }
-
 }
-
