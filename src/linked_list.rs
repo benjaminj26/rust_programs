@@ -1,6 +1,7 @@
 use std::rc::Rc;
 use std::cell::RefCell;
 use crate::read_values::to_int32;
+use crate::read_values::to_usize;
 
 #[derive(Clone)]
 struct Node
@@ -14,7 +15,12 @@ impl Node
 {
     fn new(value:i32) -> Rc<RefCell<Node>>
     {
-        let node = Node{value, next:None, prev:None};
+        let node = Node
+        {
+            value,
+            next:None,
+            prev:None
+        };
         let new_value = Rc::new(RefCell::new(node));
         new_value
     }
@@ -23,34 +29,69 @@ impl Node
 #[derive(Clone)]
 struct LinkedList
 {
-    head:Option<Rc<RefCell<Node>>>,
-    tail:Option<Rc<RefCell<Node>>>,
-    current_value:Option<Rc<RefCell<Node>>>
+    head: Option<Rc<RefCell<Node>>>,
+    tail: Option<Rc<RefCell<Node>>>,
+    current_value: Option<Rc<RefCell<Node>>>,
+    len: usize,
+    index_table: Vec<Rc<RefCell<Node>>> 
 }
 
 impl LinkedList
 {
     fn push_back(&mut self)
     {
-        println!("Enter the data:");
-        let data = to_int32();
-        let new_node = Node::new(data);
+        println!("Enter the value:");
+        let value = to_int32();
+        let new_node = Node::new(value);
         let temp_tail = Some(new_node.clone());
         match self.tail
         {
             Some(ref mut x) =>
             {
                 new_node.borrow_mut().prev = Some(x.clone());
+                self.index_table.push(new_node.clone());
                 x.borrow_mut().next = Some(new_node);
+                self.len += 1;
             },
 
             None =>
             {
-                self.current_value = Some(new_node.clone());
+                self.index_table.push(new_node.clone());
                 self.head = Some(new_node);
+                self.len += 1;
             }
         }
         self.tail = temp_tail;
+    }
+
+    fn push_front(&mut self)
+    {
+        println!("Enter the value:");
+        let value = to_int32();
+        let new_node = Node::new(value);
+        let temp = new_node.clone();
+        let mut temp_index_vec:Vec<Rc<RefCell<Node>>> = Vec::new();
+        match self.head
+        {
+            None =>
+            {
+                self.tail = Some(temp.clone());
+                self.len += 1;
+                temp_index_vec.push(new_node.clone());
+            },
+
+            Some(ref mut x) =>
+            {
+                new_node.borrow_mut().next = Some(x.clone());
+                x.borrow_mut().prev = Some(new_node.clone());
+                self.len += 1;
+                temp_index_vec.push(new_node.clone());
+
+                temp_index_vec.append(&mut self.index_table);
+            }
+        }
+        self.head = Some(new_node);
+        self.index_table = temp_index_vec;
     }
 
     fn pop_back(&mut self)
@@ -60,20 +101,14 @@ impl LinkedList
         {
             None =>
             {
-                if let None = self.head
-                {
-                    println!("The list is empty");
-                }
-                else
-                {
-                    self.head = None;
-                    self.current_value = None;
-                }
+                println!("The list is empty");
             },
             Some(ref mut x) => 
             {
                 println!("{} is deleted from the list", x.borrow().value);
                 temp_tail = x.borrow().prev.clone();
+                self.index_table.pop();
+                self.len -= 1;
                 self.tail.take();
             }
         }
@@ -87,14 +122,51 @@ impl LinkedList
 
             None =>
             {
-                // println!("Something is wrong");
+                self.head = None;
             }
         }
         self.tail = temp_tail;
     }
 
+    fn pop_front(&mut self)
+    {
+        let mut temp:Option<Rc<RefCell<Node>>> = None; 
+        match self.head
+        {
+            None =>
+            {
+                println!("The list is empty");
+            },
+
+            Some(ref mut x) =>
+            {
+                println!("{} is deleted", x.borrow().value);
+                temp = x.borrow().next.clone();
+                self.len -= 1;
+                let mut temp_index_vec = Vec::new();
+                temp_index_vec.extend_from_slice(&self.index_table[1..]);
+                self.index_table = temp_index_vec;
+            }
+        }
+
+        match temp
+        {
+            None =>
+            {
+                self.tail = None;
+            },
+
+            Some(ref mut x) =>
+            {
+                x.borrow_mut().prev = None;
+            }
+        }
+        self.head = temp;
+    }
+
     fn display(&mut self)
     {
+        self.current_value = self.head.clone();
         let mut temp_value:Option<Rc<RefCell<Node>>>;
         loop
         {
@@ -128,39 +200,82 @@ impl LinkedList
 
 pub fn linked_list_main()
 {
-    let mut linked_list = LinkedList{head:None, tail:None, current_value:None};
+    let mut linked_list = LinkedList
+    {
+        head:None,
+        tail:None,
+        current_value:None,
+        len:0,
+        index_table:Vec::new()
+    };
     loop
     {
-        println!(
-            "1.Insert new node\n2.Delete a node from the beginning\n3.Display all the nodes\n4.Exit\nEnter your choice:"
-        );
+        println!("1.Insert a node at the end\n2.Delete a node from the end");
+        println!("3.Insert a node at the beginning\n4.Delete a node from the end");
+        println!("5.Display all the nodes\n6.Display the element at an index");
+        println!("7.Display the length of the list\n8.Exit\nEnter your choice:");
         let choice = to_int32();
         match choice
         {
             1 =>
             {
                 linked_list.push_back();
-            }
+            },
 
             2 =>
             {
                 linked_list.pop_back();
-            }
+            },
 
             3 =>
             {
-                linked_list.display();
-            }
+                linked_list.push_front();
+            },
 
             4 =>
             {
+                linked_list.pop_front();
+            },
+
+            5 =>
+            {
+                linked_list.display();
+            },
+
+            6 =>
+            {
+                println!("Enter the index of the element:");
+                let index = to_usize();
+                if linked_list.len == 0
+                {
+                    println!("The list is empty");
+                }
+                else if index >= linked_list.len
+                {
+                    println!("The entered index value is greater than the length of the list");
+                }
+                else
+                {
+                    let value = linked_list.index_table[index].borrow().value;
+                    println!("The element at index {} is {}", index, value);
+                }
+            },
+
+            7 =>
+            {
+                println!("The length of the list is {}", linked_list.len);
+            },
+
+            8 =>
+            {
                 break;
-            }
+            },
 
             _ =>
             {
                 println!("Invalid Input!!");
             }   
         }
+        println!();
     }
 }
