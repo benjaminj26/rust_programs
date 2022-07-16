@@ -94,6 +94,37 @@ impl LinkedList
         self.index_table = temp_index_vec;
     }
 
+    fn insert_at_index(&mut self)
+    {
+        println!("Enter the index:");
+        let index = to_usize();
+        if index >= self.len
+        {
+            println!("The entered index is not accessible");
+        }
+        else
+        {
+            println!("Enter the value to be inserted:");
+            let value = to_int32();
+            let new_node = Node::new(value);
+            new_node.borrow_mut().prev = self.index_table[index].borrow().prev.clone();
+            new_node.borrow_mut().next = Some(self.index_table[index].clone());
+            self.index_table[index].borrow_mut().prev = Some(new_node.clone());
+            if let Some(ref mut x) = new_node.borrow_mut().prev
+            {
+                x.borrow_mut().next = Some(new_node.clone());
+            }
+    
+            let mut temp_index_vec:Vec<Rc<RefCell<Node>>> = Vec::new();
+            temp_index_vec.extend_from_slice(&self.index_table[..index]);
+            temp_index_vec.push(new_node.clone());
+            temp_index_vec.extend_from_slice(&self.index_table[index..]);
+            
+            self.index_table = temp_index_vec;
+            self.len += 1;
+        }
+    }
+
     fn pop_back(&mut self)
     {
         let mut temp_tail:Option<Rc<RefCell<Node>>> = None;
@@ -212,8 +243,9 @@ pub fn linked_list_main()
     {
         println!("1.Insert a node at the end\n2.Delete a node from the end");
         println!("3.Insert a node at the beginning\n4.Delete a node from the end");
-        println!("5.Display all the nodes\n6.Display the element at an index");
-        println!("7.Display the length of the list\n8.Exit\nEnter your choice:");
+        println!("5.Insert at an index\n6.Delete from an index");
+        println!("7.Display all the nodes\n8.Display the element at an index");
+        println!("9.Display the length of the list\n10.Exit\nEnter your choice:");
         let choice = to_int32();
         match choice
         {
@@ -239,10 +271,15 @@ pub fn linked_list_main()
 
             5 =>
             {
+                linked_list.insert_at_index();
+            },
+
+            7 =>
+            {
                 linked_list.display();
             },
 
-            6 =>
+            8 =>
             {
                 println!("Enter the index of the element:");
                 let index = to_usize();
@@ -261,12 +298,12 @@ pub fn linked_list_main()
                 }
             },
 
-            7 =>
+            9 =>
             {
                 println!("The length of the list is {}", linked_list.len);
             },
 
-            8 =>
+            10 =>
             {
                 break;
             },
