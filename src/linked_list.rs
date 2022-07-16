@@ -195,6 +195,52 @@ impl LinkedList
         self.head = temp;
     }
 
+    fn delete_from_index(&mut self)
+    {
+        println!("Enter the index to delete from:");
+        let index = to_usize();
+        
+        if index >= self.len
+        {
+            println!("The entered index is not accessible");
+        }
+        else
+        {
+            let mut temp:Vec<Rc<RefCell<Node>>> = Vec::new();
+            println!("{} is deleted", self.index_table[index].borrow().value);
+            match self.index_table[index].borrow_mut().prev
+            {
+                None =>
+                {
+                    self.index_table[index + 1].borrow_mut().prev = None;
+                },
+
+                Some(ref mut x) =>
+                {
+                    self.index_table[index + 1].borrow_mut().prev = Some(x.clone());
+                }
+            }
+
+            match self.index_table[index].borrow_mut().next
+            {
+                None =>
+                {
+                    self.index_table[index - 1].borrow_mut().next = None;
+                },
+
+                Some(ref mut x) =>
+                {
+                    self.index_table[index - 1].borrow_mut().next = Some(x.clone());
+                }
+            }
+
+            temp.extend_from_slice(&self.index_table[..index]);
+            temp.extend_from_slice(&self.index_table[index+1..]);
+            self.len -= 1;
+            self.index_table = temp;
+        }
+    }
+
     fn display(&mut self)
     {
         self.current_value = self.head.clone();
@@ -272,6 +318,11 @@ pub fn linked_list_main()
             5 =>
             {
                 linked_list.insert_at_index();
+            },
+
+            6 =>
+            {
+                linked_list.delete_from_index();
             },
 
             7 =>
