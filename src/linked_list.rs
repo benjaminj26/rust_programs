@@ -36,6 +36,47 @@ struct LinkedList
     index_table: Vec<Rc<RefCell<Node>>> 
 }
 
+impl Iterator for LinkedList
+{
+    type Item = Node;
+    
+    fn next(&mut self) -> Option<Self::Item>
+    {
+        let item:Option<Node>;
+        let temp:Option<Rc<RefCell<Node>>>;
+        match self.current_value
+        {
+            Some(ref mut x) =>
+            {
+                let value = x.borrow().value;
+                let next = x.borrow().next.clone();
+                let prev = x.borrow().prev.clone();
+
+                item = Some(Node{value, next, prev});
+            },
+
+            None =>
+            {
+                item = None;
+            }
+        }
+        match self.current_value
+        {
+            Some(ref x) =>
+            {
+                temp = x.borrow().next.clone();
+            },
+
+            None =>
+            {
+                temp = None;
+            }
+        }
+        self.current_value = temp.clone();
+        item
+    }
+}
+
 impl LinkedList
 {
     fn push_back(&mut self)
@@ -58,6 +99,7 @@ impl LinkedList
             {
                 self.index_table.push(new_node.clone());
                 self.head = Some(new_node);
+                self.current_value = self.head.clone();
                 self.len += 1;
             }
         }
@@ -91,6 +133,7 @@ impl LinkedList
             }
         }
         self.head = Some(new_node);
+        self.current_value = self.head.clone();
         self.index_table = temp_index_vec;
     }
 
@@ -101,6 +144,14 @@ impl LinkedList
         if index >= self.len
         {
             println!("The entered index is not accessible");
+        }
+        else if index == 0
+        {
+            self.push_front();
+        }
+        else if index == self.len - 1
+        {
+            self.push_back();
         }
         else
         {
@@ -157,6 +208,7 @@ impl LinkedList
             }
         }
         self.tail = temp_tail;
+        self.current_value = self.head.clone();
     }
 
     fn pop_front(&mut self)
@@ -193,6 +245,7 @@ impl LinkedList
             }
         }
         self.head = temp;
+        self.current_value = self.head.clone();
     }
 
     fn delete_from_index(&mut self)
@@ -203,6 +256,14 @@ impl LinkedList
         if index >= self.len
         {
             println!("The entered index is not accessible");
+        }
+        else if index == 0
+        {
+            self.pop_front();
+        }
+        else if index == self.len - 1
+        {
+            self.pop_back();
         }
         else
         {
@@ -239,39 +300,6 @@ impl LinkedList
             self.len -= 1;
             self.index_table = temp;
         }
-    }
-
-    fn display(&mut self)
-    {
-        self.current_value = self.head.clone();
-        let mut temp_value:Option<Rc<RefCell<Node>>>;
-        loop
-        {
-            match self.current_value
-            {
-                None =>
-                {
-                    if let None = self.head
-                    {
-                        println!("The list is empty");
-                        break;
-                    }
-                    else
-                    {
-                        println!();
-                        break;
-                    }
-                },
-
-                Some(ref x) =>
-                {
-                    print!("{} ", x.borrow().value);
-                    temp_value = x.borrow().next.clone();
-                }
-            }
-            self.current_value = temp_value;
-        }
-        self.current_value = self.head.clone();
     }
 }
 
@@ -327,7 +355,23 @@ pub fn linked_list_main()
 
             7 =>
             {
-                linked_list.display();
+                println!("The elements of the list are:");
+                for _ in 0..linked_list.len
+                {
+                    let temp = linked_list.next();
+                    match temp
+                    {
+                        Some(ref x) =>
+                        {
+                            println!("{}", x.value);
+                        },
+
+                        None =>
+                        {
+                            println!("End of the list");
+                        }
+                    }
+                }
             },
 
             8 =>
