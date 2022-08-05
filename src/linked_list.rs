@@ -53,23 +53,13 @@ impl Iterator for LinkedList
                 let prev = x.borrow().prev.clone();
 
                 item = Some(Node{value, next, prev});
-            },
-
-            None =>
-            {
-                item = None;
-            }
-        }
-        match self.current_value
-        {
-            Some(ref x) =>
-            {
                 temp = x.borrow().next.clone();
             },
 
             None =>
             {
-                temp = None;
+                self.current_value = self.head.clone();
+                return None;
             }
         }
         self.current_value = temp.clone();
@@ -315,8 +305,8 @@ pub fn linked_list_main()
     };
     loop
     {
-        println!("1.Insert a node at the end\n2.Delete a node from the end");
-        println!("3.Insert a node at the beginning\n4.Delete a node from the end");
+        println!("1.Insert a node at the end\n2.Delete the node at the end");
+        println!("3.Insert a node at the beginning\n4.Delete the node at the beginning");
         println!("5.Insert at an index\n6.Delete from an index");
         println!("7.Display all the nodes\n8.Display the element at an index");
         println!("9.Display the length of the list\n10.Exit\nEnter your choice:");
@@ -356,22 +346,13 @@ pub fn linked_list_main()
             7 =>
             {
                 println!("The elements of the list are:");
-                for _ in 0..linked_list.len
+                let mut temp = linked_list.next();
+                while let Some(ref x) = temp
                 {
-                    let temp = linked_list.next();
-                    match temp
-                    {
-                        Some(ref x) =>
-                        {
-                            println!("{}", x.value);
-                        },
-
-                        None =>
-                        {
-                            println!("End of the list");
-                        }
-                    }
+                    print!("{} ", x.value);
+                    temp = linked_list.next();
                 }
+                println!();
             },
 
             8 =>
