@@ -33,13 +33,13 @@ struct LinkedList
     tail: Option<Rc<RefCell<Node>>>,
     current_value: Option<Rc<RefCell<Node>>>,
     len: usize,
-    index_table: Vec<Rc<RefCell<Node>>> 
+    index_table: Vec<Rc<RefCell<Node>>>
 }
 
 impl Iterator for LinkedList
 {
     type Item = Node;
-    
+
     fn next(&mut self) -> Option<Self::Item>
     {
         let item:Option<Node>;
@@ -155,12 +155,12 @@ impl LinkedList
             {
                 x.borrow_mut().next = Some(new_node.clone());
             }
-    
+
             let mut temp_index_vec:Vec<Rc<RefCell<Node>>> = Vec::new();
             temp_index_vec.extend_from_slice(&self.index_table[..index]);
             temp_index_vec.push(new_node.clone());
             temp_index_vec.extend_from_slice(&self.index_table[index..]);
-            
+
             self.index_table = temp_index_vec;
             self.len += 1;
         }
@@ -175,7 +175,7 @@ impl LinkedList
             {
                 println!("The list is empty");
             },
-            Some(ref mut x) => 
+            Some(ref mut x) =>
             {
                 println!("{} is deleted from the list", x.borrow().value);
                 temp_tail = x.borrow().prev.clone();
@@ -203,7 +203,7 @@ impl LinkedList
 
     fn pop_front(&mut self)
     {
-        let mut temp:Option<Rc<RefCell<Node>>> = None; 
+        let mut temp:Option<Rc<RefCell<Node>>> = None;
         match self.head
         {
             None =>
@@ -242,7 +242,7 @@ impl LinkedList
     {
         println!("Enter the index to delete from:");
         let index = to_usize();
-        
+
         if index >= self.len
         {
             println!("The entered index is not accessible");
@@ -387,7 +387,7 @@ pub fn linked_list_main()
             _ =>
             {
                 println!("Invalid Input!!");
-            }   
+            }
         }
         println!();
     }

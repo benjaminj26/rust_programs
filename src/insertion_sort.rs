@@ -31,10 +31,10 @@ fn insertion_sort(vector:&mut Vec<i32>)
         let mut y = x-1;
         let mut flag = 0;
 
-        while key < vector[y] 
+        while key < vector[y]
         {
             vector[y+1] = vector[y];
-            if y == 0 
+            if y == 0
             {
                 vector[y] = key;
                 flag = 1;

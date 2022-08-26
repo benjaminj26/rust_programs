@@ -6,7 +6,7 @@ pub fn to_int32() -> i32
     let mut str = String::new();
     io::stdin().read_line(&mut str).expect("Unable to read from stdin");
     let num:i32 = str.trim().parse().expect("Unable to parse");
-    num
+	num
 }
 
 pub fn to_uint32() -> u32
