@@ -12,7 +12,7 @@ pub fn stack_main()
 		println!("2.Pop");
 		println!("3.Display");
 		println!("4.Exit");
-		println!("Enter your choice: ");
+		println!("Enter your choice:");
 		let choice = to_int32();
 
 		match choice
