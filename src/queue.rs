@@ -6,7 +6,7 @@ pub fn queue_main()
 	let mut queue:[i32;LENGTH] = [-1; LENGTH];
 	let mut front:usize = LENGTH;
 	let mut rear:usize = LENGTH;
-	
+
 	loop
 	{
 		println!("1.Enqueue");
@@ -109,6 +109,6 @@ fn dequeue(queue:&mut [i32], length:usize, front:&mut usize, rear:&mut usize)
 	{
 		println!("{} is removed from the queue", queue[*front]);
 		queue[*front] = -1;
-		*front += 1;	
+		*front += 1;
 	}
 }
