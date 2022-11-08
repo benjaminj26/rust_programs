@@ -346,11 +346,9 @@ pub fn linked_list_main()
             7 =>
             {
                 println!("The elements of the list are:");
-                let mut temp = linked_list.next();
-                while let Some(ref x) = temp
+                for x in linked_list.clone()
                 {
                     print!("{} ", x.value);
-                    temp = linked_list.next();
                 }
                 println!();
             },

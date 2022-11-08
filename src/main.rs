@@ -1,7 +1,7 @@
 mod read_values;
-mod binary_tree;
+mod linked_list;
 
 fn main()
 {
-	binary_tree::binary_tree_main();
+	linked_list::linked_list_main();
 }
