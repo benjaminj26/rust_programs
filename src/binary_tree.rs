@@ -14,7 +14,7 @@ impl Node
 {
 	fn new() -> Option<Rc<RefCell<Node>>>
 	{
-		println!("\nEnter the new value:");
+		print!("\nEnter the new value: ");
 		let value = to_int32();
 
 		let new_node = Node{
@@ -59,7 +59,7 @@ impl BinaryTree
 					{
 						println!("\n1.Insert at left");
 						println!("2.Insert at right");
-						println!("Enter your choice:");
+						print!("Enter your choice: ");
 						let choice = to_int32();
 
 						if choice == 1
@@ -123,7 +123,7 @@ impl BinaryTree
 		{
 			Some(ref _x) =>
 			{
-				println!("\nEnter the value of the parent node:");
+				print!("\nEnter the value of the parent node: ");
 				let value = to_int32();
 				let status = BinaryTree::traverse(temp.clone(), value, new_node.clone());
 
@@ -177,7 +177,7 @@ pub fn binary_tree_main()
 		println!("1.Insert a new node");
 		println!("2.Display all the nodes");
 		println!("3.Exit");
-		println!("Enter your choice:");
+		print!("Enter your choice: ");
 		
 		let choice = to_int32();
 

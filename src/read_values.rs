@@ -1,112 +1,140 @@
 #![allow(dead_code)]
-use std::io;
+use std::io::{self, Write};
 
-pub fn to_int32() -> i32
-{
+pub fn to_int32() -> i32 {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:i32 = str.trim().parse().expect("Unable to parse");
-	num
-}
-
-pub fn to_uint32() -> u32
-{
-    let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:u32 = str.trim().parse().expect("Unable to parse");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: i32 = str.trim().parse().expect("Unable to parse");
     num
 }
 
-pub fn to_float32() -> f32
-{
+pub fn to_uint32() -> u32 {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:f32 = str.trim().parse().expect("Unable to parse");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: u32 = str.trim().parse().expect("Unable to parse");
     num
 }
 
-pub fn to_int64() -> i64
-{
+pub fn to_float32() -> f32 {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:i64 = str.trim().parse().expect("Unable to parse");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: f32 = str.trim().parse().expect("Unable to parse");
     num
 }
 
-pub fn to_uint64() -> u64
-{
+pub fn to_int64() -> i64 {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:u64 = str.trim().parse().expect("Unable to parse");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: i64 = str.trim().parse().expect("Unable to parse");
     num
 }
 
-pub fn to_float64() -> f64
-{
+pub fn to_uint64() -> u64 {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:f64 = str.trim().parse().expect("Unable to parse");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: u64 = str.trim().parse().expect("Unable to parse");
     num
 }
 
-pub fn to_int16() -> i16
-{
+pub fn to_float64() -> f64 {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:i16 = str.trim().parse().expect("Unable to parse");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: f64 = str.trim().parse().expect("Unable to parse");
     num
 }
 
-pub fn to_uint16() -> u16
-{
+pub fn to_int16() -> i16 {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:u16 = str.trim().parse().expect("Unable to parse");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: i16 = str.trim().parse().expect("Unable to parse");
     num
 }
 
-pub fn to_int8() -> i8
-{
+pub fn to_uint16() -> u16 {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:i8 = str.trim().parse().expect("Unable to parse");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: u16 = str.trim().parse().expect("Unable to parse");
     num
 }
 
-pub fn to_uint8() -> u8
-{
+pub fn to_int8() -> i8 {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:u8 = str.trim().parse().expect("Unable to parse");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: i8 = str.trim().parse().expect("Unable to parse");
     num
 }
 
-pub fn to_size() -> isize
-{
+pub fn to_uint8() -> u8 {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:isize = str.trim().parse().expect("Unable to parse");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: u8 = str.trim().parse().expect("Unable to parse");
     num
 }
 
-pub fn to_usize() -> usize
-{
+pub fn to_size() -> isize {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let num:usize = str.trim().parse().expect("Unable to parse");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: isize = str.trim().parse().expect("Unable to parse");
     num
 }
 
-pub fn read_string() -> String
-{
+pub fn to_usize() -> usize {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
+    let num: usize = str.trim().parse().expect("Unable to parse");
+    num
+}
+
+pub fn read_string() -> String {
+    let mut str = String::new();
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
     str
 }
 
-pub fn read_char() -> char
-{
+pub fn read_char() -> char {
     let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
+    io::stdout().flush().expect("Unable to flush stdin");
+    io::stdin()
+        .read_line(&mut str)
+        .expect("Unable to read from stdin");
     str.remove(0)
 }

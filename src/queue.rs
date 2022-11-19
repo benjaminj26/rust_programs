@@ -13,7 +13,7 @@ pub fn queue_main()
 		println!("2.Dequeue");
 		println!("3.Display The Elements");
 		println!("4.Exit");
-		println!("Enter your choice:");
+		print!("Enter your choice: ");
 		let choice = to_int32();
 
 		match choice
@@ -69,7 +69,7 @@ fn enqueue(queue:&mut [i32], length:usize, front:&mut usize, rear:&mut usize)
 {
 	if *front == length && *rear == length
 	{
-		println!("Enter the value:");
+		print!("Enter the value: ");
 		let value = to_int32();
 		*front = 0;
 		*rear = 0;
@@ -81,7 +81,7 @@ fn enqueue(queue:&mut [i32], length:usize, front:&mut usize, rear:&mut usize)
 	}
 	else
 	{
-		println!("Enter the value:");
+		print!("Enter the value: ");
 		let value = to_int32();
 		*rear += 1;
 		queue[*rear] = value;

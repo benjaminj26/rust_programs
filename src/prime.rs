@@ -1,12 +1,10 @@
-use std::io;
+use crate::read_values::to_int32;
 
 pub fn prime()
 {
     let mut flag:i32 = 0;
-    println!("Enter a number: ");
-    let mut str = String::new();
-    io::stdin().read_line(&mut str).expect("Unable to read from stdin");
-    let number:i32 = str.trim().parse().expect("Unable to parse");
+    print!("Enter a number: ");
+    let number = to_int32();
     for x in 2..(f32::sqrt(number as f32) as i32 + 1)
     {
         if number % x == 0

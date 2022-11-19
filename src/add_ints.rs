@@ -2,9 +2,9 @@ use std::io;
 
 pub fn add_ints() 
 {
-    println!("Enter the first number: ");
+    print!("Enter the first number: ");
     let x = read_int32();
-    println!("Enter the second number: ");
+    print!("Enter the second number: ");
     let y = read_int32();
     if x != -1 && y != -1
     {

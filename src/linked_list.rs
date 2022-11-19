@@ -71,7 +71,7 @@ impl LinkedList
 {
     fn push_back(&mut self)
     {
-        println!("Enter the value:");
+        print!("Enter the value: ");
         let value = to_int32();
         let new_node = Node::new(value);
         let temp_tail = Some(new_node.clone());
@@ -98,7 +98,7 @@ impl LinkedList
 
     fn push_front(&mut self)
     {
-        println!("Enter the value:");
+        print!("Enter the value: ");
         let value = to_int32();
         let new_node = Node::new(value);
         let temp = new_node.clone();
@@ -129,7 +129,7 @@ impl LinkedList
 
     fn insert_at_index(&mut self)
     {
-        println!("Enter the index:");
+        print!("Enter the index: ");
         let index = to_usize();
         if index >= self.len
         {
@@ -145,7 +145,7 @@ impl LinkedList
         }
         else
         {
-            println!("Enter the value to be inserted:");
+            print!("Enter the value to be inserted: ");
             let value = to_int32();
             let new_node = Node::new(value);
             new_node.borrow_mut().prev = self.index_table[index].borrow().prev.clone();
@@ -240,7 +240,7 @@ impl LinkedList
 
     fn delete_from_index(&mut self)
     {
-        println!("Enter the index to delete from:");
+        print!("Enter the index to delete from: ");
         let index = to_usize();
 
         if index >= self.len
@@ -309,7 +309,7 @@ pub fn linked_list_main()
         println!("3.Insert a node at the beginning\n4.Delete the node at the beginning");
         println!("5.Insert at an index\n6.Delete from an index");
         println!("7.Display all the nodes\n8.Display the element at an index");
-        println!("9.Display the length of the list\n10.Exit\nEnter your choice:");
+        print!("9.Display the length of the list\n10.Exit\nEnter your choice: ");
         let choice = to_int32();
         match choice
         {
@@ -355,7 +355,7 @@ pub fn linked_list_main()
 
             8 =>
             {
-                println!("Enter the index of the element:");
+                print!("Enter the index of the element: ");
                 let index = to_usize();
                 if linked_list.len == 0
                 {

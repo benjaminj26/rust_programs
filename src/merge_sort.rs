@@ -9,12 +9,12 @@ use crate::read_values::to_int32;
 
 pub fn merge_sort_main()
 {
-    println!("Enter the size of the vector:");
+    print!("Enter the size of the vector: ");
     let size:usize = to_usize();
     let mut vector:Vec<i32> = Vec::new();
     for x in 0..size
     {
-        println!("Enter the element {}", x+1);
+        print!("Enter the element {}: ", x+1);
         vector.push(to_int32());
     }
     merge_sort(&mut vector, 0, size-1);

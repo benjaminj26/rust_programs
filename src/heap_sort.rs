@@ -3,15 +3,15 @@ use crate::read_values::to_usize;
 
 pub fn heap_sort_main()
 {
-    println!("Enter the size of the vector:");
+    print!("Enter the size of the vector: ");
     let size:usize = to_usize();
     let mut vector:Vec<i32> = Vec::new();
 
-    println!("Enter the contents of the vector:");
+    print!("Enter the contents of the vector: ");
 
     for x in 0..size
     {
-        println!("Enter the value at index {}:", x);
+        print!("Enter the value at index {}: ", x);
         vector.push(to_int32());
     }
 

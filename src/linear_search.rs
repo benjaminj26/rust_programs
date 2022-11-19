@@ -3,16 +3,16 @@ use crate::read_values::to_usize;
 
 pub fn linear_search_main()
 {
-    println!("Enter the size of the vector:");
+    print!("Enter the size of the vector: ");
     let size = to_usize();
 
     let mut vector:Vec<i32> = Vec::new();
     for x in 0..size
     {
-        println!("Enter the element at location {}", x);
+        print!("Enter the element at location {}: ", x);
         vector.push(to_int32());
     }
-    println!("Enter the element to be searched:");
+    print!("Enter the element to be searched: ");
     let search = to_int32();
 
     linear_search(&mut vector, search);

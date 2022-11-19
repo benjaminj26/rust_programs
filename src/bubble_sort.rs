@@ -35,13 +35,13 @@ fn print_vector(vector: &Vec<i32>)
 
 fn read_vector() -> Vec<i32>
 {
-    println!("Enter the size of the array:");
+    print!("Enter the size of the array: ");
     let size:usize = to_usize();
     let mut vector:Vec<i32> = Vec::new();
 
     for x in 0..size
     {
-        println!("Enter element {}:", x);
+        print!("Enter element {}: ", x);
         vector.push(to_int32());
     }
     vector

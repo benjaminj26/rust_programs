@@ -22,14 +22,14 @@ pub fn polynomial_addition_main()
 
 fn read_polynomial() -> Vec<Node>
 {
-    println!("Enter the number of terms:");
+    print!("Enter the number of terms: ");
     let mut vector:Vec<Node> = Vec::new();
     let size:usize = to_usize();
     for x in 0..size
     {
-        println!("Enter the power of term {}", x);
+        print!("Enter the power of term {}: ", x);
         let pow = to_int32();
-        println!("Enter the coefficient of term {}", x);
+        print!("Enter the coefficient of term {}: ", x);
         let coeff = to_int32();
         let new_node:Node = Node{coeff, pow};
         vector.push(new_node);

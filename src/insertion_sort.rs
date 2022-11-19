@@ -4,12 +4,12 @@ use crate::read_values::to_int32;
 pub fn insertion_sort_main()
 {
     let mut vector:Vec<i32> = Vec::new();
-    println!("Enter the size of the vector:");
+    print!("Enter the size of the vector: ");
     let size = to_usize();
 
     for x in 0..size
     {
-        println!("Enter the value of element {}:", x);
+        print!("Enter the value of element {}: ", x);
         vector.push(to_int32());
     }
     insertion_sort(&mut vector);

@@ -2,7 +2,7 @@ use crate::read_values::to_int32;
 
 pub fn stack_main()
 {
-	println!("Enter the size of the stack: ");
+	print!("Enter the size of the stack: ");
 	const LENGTH:usize = 5;
 	let mut stack:[i32; LENGTH] = [-1; LENGTH];
 	let mut top = LENGTH;
@@ -12,7 +12,7 @@ pub fn stack_main()
 		println!("2.Pop");
 		println!("3.Display");
 		println!("4.Exit");
-		println!("Enter your choice:");
+		print!("Enter your choice: ");
 		let choice = to_int32();
 
 		match choice
@@ -58,7 +58,7 @@ fn push(length:usize, stack:&mut [i32], top:&mut usize)
 	}
 	else if *top == length
 	{
-		println!("Enter the value to be pushed into the stack:");
+		print!("Enter the value to be pushed into the stack: ");
 		let value = to_int32();
 		*top = 0;
 		stack[*top] = value;
@@ -66,7 +66,7 @@ fn push(length:usize, stack:&mut [i32], top:&mut usize)
 	}
 	else
 	{
-		println!("Enter the value to be pushed into the stack:");
+		print!("Enter the value to be pushed into the stack: ");
 		let value = to_int32();
 		*top += 1;
 		stack[*top] = value;
