@@ -1,6 +1,6 @@
-mod thread_demo;
+mod io_lock;
 
 fn main()
 {
-	thread_demo::thread_demo();
+	io_lock::io_lock();
 }
