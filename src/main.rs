@@ -1,6 +1,6 @@
-mod io_lock;
+mod read_values;
+mod linked_list;
 
-fn main()
-{
-	io_lock::io_lock();
+fn main() {
+	linked_list::linked_list_main();
 }
