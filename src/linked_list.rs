@@ -1,20 +1,17 @@
 #![allow(dead_code)]
-
-use crate::read_values::to_int32;
-use crate::read_values::to_usize;
 use std::cell::RefCell;
 use std::marker::PhantomData;
 use std::rc::Rc;
 
 #[derive(Clone)]
-struct Node {
-    value: i32,
-    next: Option<Rc<RefCell<Node>>>,
-    prev: Option<Rc<RefCell<Node>>>,
+struct Node<T> {
+    value: T,
+    next: Option<Rc<RefCell<Node<T>>>>,
+    prev: Option<Rc<RefCell<Node<T>>>>,
 }
 
-impl Node {
-    fn new(value: i32) -> Rc<RefCell<Node>> {
+impl<T> Node<T> {
+    fn new(value: T) -> Rc<RefCell<Node<T>>> {
         let node = Node {
             value,
             next: None,
@@ -26,14 +23,14 @@ impl Node {
 }
 
 #[derive(Clone)]
-struct LinkedList {
-    head: Option<Rc<RefCell<Node>>>,
-    tail: Option<Rc<RefCell<Node>>>,
+pub struct LinkedList<T> {
+    head: Option<Rc<RefCell<Node<T>>>>,
+    tail: Option<Rc<RefCell<Node<T>>>>,
     len: usize,
 }
 
-impl LinkedList {
-    fn new() -> LinkedList {
+impl<T> LinkedList<T> {
+    pub fn new() -> LinkedList<T> {
         return LinkedList {
             head: None,
             tail: None,
@@ -41,9 +38,7 @@ impl LinkedList {
         };
     }
 
-    fn push_back(&mut self) {
-        print!("Enter the value: ");
-        let value = to_int32();
+    pub fn push_back(&mut self, value: T) {
         let new_node = Node::new(value);
         let temp_tail = Some(new_node.clone());
         match self.tail {
@@ -60,9 +55,7 @@ impl LinkedList {
         self.tail = temp_tail;
     }
 
-    fn push_front(&mut self) {
-        print!("Enter the value: ");
-        let value = to_int32();
+    pub fn push_front(&mut self, value: T) {
         let new_node = Node::new(value);
         let temp = new_node.clone();
         match self.head {
@@ -79,20 +72,16 @@ impl LinkedList {
         self.head = Some(new_node);
     }
 
-    fn insert_at_index(&mut self) {
-        print!("Enter the index: ");
-        let index = to_usize();
+    pub fn insert_at_index(&mut self, value: T, index: usize) {
         if index > self.len + 1 {
             println!("Index is out of bounds")
         } else if index == self.len + 1 {
-            self.push_back();
+            self.push_back(value);
         } else if index == 0 {
-            self.push_front();
+            self.push_front(value);
         } else {
-            print!("Enter the value to be inserted: ");
-            let value = to_int32();
             let new_node = Node::new(value);
-            let mut iterator: Option<Rc<RefCell<Node>>> = self.head.clone();
+            let mut iterator = self.head.clone();
             for _ in 0..(index - 2) {
                 if let Some(ref mut x) = iterator.clone() {
                     iterator = x.borrow().next.clone();
@@ -113,17 +102,18 @@ impl LinkedList {
         }
     }
 
-    fn pop_back(&mut self) {
-        let mut temp_tail: Option<Rc<RefCell<Node>>> = None;
+    pub fn pop_back(&mut self) -> Option<T> {
+        let mut temp_tail;
+        let return_value;
         match self.tail {
             None => {
                 println!("The list is empty");
+                return None;
             }
             Some(ref mut x) => {
-                println!("{} is deleted from the list", x.borrow().value);
                 temp_tail = x.borrow().prev.clone();
                 self.len -= 1;
-                self.tail.take();
+                return_value = self.tail.take().unwrap();
             }
         }
 
@@ -137,19 +127,29 @@ impl LinkedList {
             }
         }
         self.tail = temp_tail;
+        let return_value = Rc::try_unwrap(return_value);
+        match return_value {
+            Ok(x) => {
+                return Some(x.into_inner().value);
+            }, Err(_) => {
+                return None;
+            }
+        }
     }
 
-    fn pop_front(&mut self) {
-        let mut temp: Option<Rc<RefCell<Node>>> = None;
+    pub fn pop_front(&mut self) -> Option<T> {
+        let mut temp;
+        let return_value;
         match self.head {
             None => {
                 println!("The list is empty");
+                return None;
             }
 
             Some(ref mut x) => {
-                println!("{} is deleted", x.borrow().value);
                 temp = x.borrow().next.clone();
                 self.len -= 1;
+                return_value = self.head.take().unwrap();
             }
         }
 
@@ -163,18 +163,25 @@ impl LinkedList {
             }
         }
         self.head = temp;
+        let return_value = Rc::try_unwrap(return_value);
+        match return_value {
+            Ok(x) => {
+                return Some(x.into_inner().value);
+            }, Err(_) => {
+                return None;
+            }
+        }
     }
 
-    fn delete_from_index(&mut self) {
-        print!("Enter the index to delete from: ");
-        let index = to_usize();
+    pub fn delete_from_index(&mut self, index: usize) -> Option<T> {
 
         if index >= self.len {
             println!("Index is out of bounds");
+            return None;
         } else if index == 0 {
-            self.pop_front();
+            return self.pop_front();
         } else if index == self.len {
-            self.pop_back();
+            return self.pop_back();
         } else {
             let mut iterator = self.head.clone();
             for _ in 0..(index - 1) {
@@ -183,7 +190,6 @@ impl LinkedList {
                 }
             }
             let iterator = iterator.unwrap();
-            println!("{} is deleted", iterator.borrow().value);
             if let Some(ref x) = iterator.borrow().prev {
                 x.borrow_mut().next = iterator.borrow().next.clone();
             }
@@ -192,17 +198,29 @@ impl LinkedList {
                 x.borrow_mut().prev = iterator.borrow().prev.clone();
             }
             self.len -= 1;
+            let iterator = Rc::try_unwrap(iterator);
+            match iterator {
+                Ok(x) => {
+                    return Some(x.into_inner().value);
+                }, Err(_) => {
+                    return None;
+                }
+            }
         }
     }
 
-    fn iter<'a>(&self) -> Iter<'a> {
+    pub fn len(&self) -> usize {
+        return self.len;
+    }
+
+    pub fn iter<'a>(&self) -> Iter<'a, T> {
         return Iter {
             current_value: self.head.clone(),
             phantom: PhantomData,
         };
     }
 
-    fn iter_mut<'a>(&mut self) -> IterMut<'a> {
+    pub fn iter_mut<'a>(&mut self) -> IterMut<'a, T> {
         return IterMut {
             current_value: self.head.clone(),
             phantom: PhantomData,
@@ -210,20 +228,20 @@ impl LinkedList {
     }
 }
 
-struct Iter<'a> {
-    current_value: Option<Rc<RefCell<Node>>>,
-    phantom: PhantomData<&'a i32>,
+pub struct Iter<'a, T> {
+    current_value: Option<Rc<RefCell<Node<T>>>>,
+    phantom: PhantomData<&'a T>,
 }
 
-impl<'a> Iterator for Iter<'a> {
-    type Item = &'a i32;
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a T;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.current_value.is_some() {
             let unwrapped = self.current_value.clone().unwrap();
             self.current_value = unwrapped.borrow().next.clone();
 
-            let raw_pointer: *mut Node = unwrapped.as_ptr();
+            let raw_pointer: *mut Node<T> = unwrapped.as_ptr();
             unsafe {
                 return Some(&(*raw_pointer).value);
             }
@@ -233,101 +251,25 @@ impl<'a> Iterator for Iter<'a> {
     }
 }
 
-struct IterMut<'a> {
-    current_value: Option<Rc<RefCell<Node>>>,
-    phantom: PhantomData<&'a i32>,
+pub struct IterMut<'a, T> {
+    current_value: Option<Rc<RefCell<Node<T>>>>,
+    phantom: PhantomData<&'a T>,
 }
 
-impl<'a> Iterator for IterMut<'a> {
-    type Item = &'a mut i32;
+impl<'a, T> Iterator for IterMut<'a, T> {
+    type Item = &'a mut T;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.current_value.is_some() {
             let unwrapped = self.current_value.clone().unwrap();
             self.current_value = unwrapped.borrow().next.clone();
 
-            let raw_pointer: *mut Node = unwrapped.as_ptr();
+            let raw_pointer: *mut Node<T> = unwrapped.as_ptr();
             unsafe {
                 return Some(&mut (*raw_pointer).value);
             }
         } else {
             return None;
         }
-    }
-}
-
-pub fn linked_list_main() {
-    let mut linked_list = LinkedList::new();
-
-    loop {
-        println!("1.Insert a node at the end\n2.Delete the node at the end");
-        println!("3.Insert a node at the beginning\n4.Delete the node at the beginning");
-        println!("5.Insert at an index\n6.Delete from an index");
-        println!("7.Display all the nodes\n8.Display the element at an index");
-        print!("9.Display the length of the list\n10.Exit\nEnter your choice: ");
-        let choice = to_int32();
-        match choice {
-            1 => {
-                linked_list.push_back();
-            }
-
-            2 => {
-                linked_list.pop_back();
-            }
-
-            3 => {
-                linked_list.push_front();
-            }
-
-            4 => {
-                linked_list.pop_front();
-            }
-
-            5 => {
-                linked_list.insert_at_index();
-            }
-
-            6 => {
-                linked_list.delete_from_index();
-            }
-
-            7 => {
-                println!("The elements of the list are:");
-                for x in linked_list.iter() {
-                    print!("{} ", x);
-                }
-                println!();
-            }
-
-            8 => {
-                print!("Enter the index of the element: ");
-                let index = to_usize();
-                if linked_list.len == 0 {
-                    println!("The list is empty");
-                } else if index > linked_list.len {
-                    println!("Index is out of bounds");
-                } else {
-                    let mut iterator = linked_list.head.clone().unwrap();
-                    for _ in 0..(index - 1) {
-                        iterator = iterator.clone().borrow().next.clone().unwrap();
-                    }
-                    let value = iterator.borrow().value;
-                    println!("The element at index {} is {}", index, value);
-                }
-            }
-
-            9 => {
-                println!("The length of the list is {}", linked_list.len);
-            }
-
-            10 => {
-                break;
-            }
-
-            _ => {
-                println!("Invalid Input!!");
-            }
-        }
-        println!();
     }
 }
