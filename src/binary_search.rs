@@ -1,96 +1,72 @@
-use crate::read_values::to_usize;
-use crate::read_values::to_uint8;
 use crate::read_values::to_int32;
+use crate::read_values::to_uint8;
+use crate::read_values::to_usize;
 
-pub fn binary_search_main()
-{
+pub fn binary_search_main() {
     print!("Enter the size of the vector: ");
-    let size:usize = to_usize();
-    let mut vector:Vec<i32> = Vec::new();
-    for x in 0..size
-    {
+    let size: usize = to_usize();
+    let mut vector: Vec<i32> = Vec::new();
+    for x in 0..size {
         print!("Enter the element {}: ", x);
         vector.push(to_int32());
     }
-     
-    loop
-    {
+
+    loop {
         println!("1.Binary Search");
         println!("2.Exit");
         print!("Enter your choice: ");
-        let choice:u8 = to_uint8();
-        if choice == 1
-        {
+        let choice: u8 = to_uint8();
+        if choice == 1 {
             binary_search(&vector, size);
-        }
-        else if choice == 2
-        {
+        } else if choice == 2 {
             break;
-        }
-        else
-        {
+        } else {
             println!("\nInvalid Input\n");
         }
     }
 }
 
-fn binary_search(vector:&Vec<i32>, size:usize)
-{
-    let mut low:usize = 0;
-    let mut upp:usize = size-1;
-    let mut mid:usize = low + (upp - low)/2;
-    let mut flag:u8 = 0;
+fn binary_search(vector: &Vec<i32>, size: usize) {
+    let mut low: usize = 0;
+    let mut upp: usize = size - 1;
+    let mut mid: usize = low + (upp - low) / 2;
+    let mut flag: u8 = 0;
 
     print!("Enter the element to be searched: ");
-    let element:i32 = to_int32();
+    let element: i32 = to_int32();
 
-    while mid > 0 && mid < size
-    {
-        if vector[mid] == element
-        {
+    while mid > 0 && mid < size {
+        if vector[mid] == element {
             flag = 1;
             println!("The element is found at location {}", mid);
             break;
-        }
-        else if element < vector[mid]
-        {
+        } else if element < vector[mid] {
             upp = mid;
-            if (upp - low)/2 == 0
-            {
+            if (upp - low) / 2 == 0 {
                 mid -= 1;
-                if vector[mid] == element
-                {
+                if vector[mid] == element {
                     flag = 1;
                     println!("Element found at location {}", mid);
                     break;
                 }
+            } else {
+                mid = low + (upp - low) / 2;
             }
-            else
-            {
-                mid = low + (upp - low)/2;
-            }
-        }
-        else if element > vector[mid]
-        {
+        } else if element > vector[mid] {
             low = mid;
-            if (upp - low)/2 == 0
-            {
+            if (upp - low) / 2 == 0 {
                 mid += 1;
-                if vector[mid] == element
-                {
+                if vector[mid] == element {
                     flag = 1;
                     println!("Element found at location {}", mid);
                     break;
                 }
-            }
-            else
-            {
-                mid = low + (upp - low)/2;
+            } else {
+                mid = low + (upp - low) / 2;
             }
         }
     }
-    if flag == 0
-    {
+    if flag == 0 {
         println!("Element not found");
     }
 }
